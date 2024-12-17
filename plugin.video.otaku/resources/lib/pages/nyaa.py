@@ -200,6 +200,9 @@ class sources(BrowserBase):
         if season:
             season = str(season['season']).zfill(2)
             query += '|"S%sE%s "' % (season, episode.zfill(2))
+        
+        if control.getSetting('provider.nyaa_vostfr') == 'true':
+            query += ' VOSTFR'
 
         url = '%s?f=0&c=1_0&q=%s&s=downloads&o=desc' % (self._BASE_URL, urllib_parse.quote_plus(query))
 
@@ -214,6 +217,10 @@ class sources(BrowserBase):
                 query += '|"S%sE%s "' % (season, episode.zfill(2))
 
             query += '|"- %s"' % (episode.zfill(2))
+
+            if control.getSetting('provider.nyaa_vostfr') == 'true':
+                query += ' VOSTFR'
+
             url = '%s?f=0&c=1_0&q=%s&s=seeders&&o=desc' % (self._BASE_URL, urllib_parse.quote_plus(query))
 
         return self._process_nyaa_episodes(url, episode.zfill(2), season)
