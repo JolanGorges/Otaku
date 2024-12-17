@@ -145,6 +145,7 @@
 		<setting id="provider.animetosho" type="bool" label="Anime Tosho" default="true" />
 		<setting id="provider.nyaa" type="bool" label="Nyaa" default="true" />
 		<setting id="provider.nyaaalt" type="bool" subsetting="true" label="Nyaa Alt (For Verizon Users)" default="false" visible="eq(-1,true)" />
+		<setting id="provider.nyaa_vostfr" type="bool" subsetting="true" label="Search VOSTFR only" default="false" visible="eq(-2,true)" />
 
 		<!-- Universal Sub Embeds -->
 		<setting type="lsep" label="40504" />
