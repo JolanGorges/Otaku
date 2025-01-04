@@ -11,10 +11,10 @@ class sources(BrowserBase):
         self.cloud_files = []
         self.threads = []
 
-    def get_sources(self, debrid, query, episode):
+    def get_sources(self, debrid, query, episode, media_type):
         if debrid.get('real_debrid'):
             self.threads.append(
-                threading.Thread(target=self.rd_cloud_inspection, args=(query, episode,)))
+                threading.Thread(target=self.rd_cloud_inspection, args=(query, episode, media_type,)))
 
         if debrid.get('premiumize'):
             self.threads.append(
@@ -36,7 +36,7 @@ class sources(BrowserBase):
 
         return self.cloud_files
 
-    def rd_cloud_inspection(self, query, episode):
+    def rd_cloud_inspection(self, query, episode, media_type):
         api = real_debrid.RealDebrid()
         torrents = api.list_torrents()
 
@@ -48,7 +48,7 @@ class sources(BrowserBase):
         for i in resp:
             torrent = torrents[i]
             filename = re.sub(r'\[.*?]', '', torrent['filename']).lower()
-            if source_utils.is_file_ext_valid(filename) and episode not in filename.rsplit('-', 1)[1]:
+            if source_utils.is_file_ext_valid(filename) and media_type != 'movie' and ('-' not in filename or str(episode) not in filename.rsplit('-', 1)[1]):
                 continue
             torrent_info = api.torrentInfo(torrent['id'])
 
@@ -57,9 +57,9 @@ class sources(BrowserBase):
                 continue
 
             if control.getSetting('general.manual.select') != 'true':
-                best_match = source_utils.get_best_match('path', torrent_files, episode)
+                best_match = source_utils.get_best_match('path', torrent_files, str(episode))
                 for f_index, torrent_file in enumerate(torrent_files):
-                    if torrent_file['path'] == best_match['path']:
+                    if torrent_file['path'] == best_match['path'] if best_match else True:
                         self.cloud_files.append(
                             {
                                 'quality': source_utils.getQuality(torrent['filename']),

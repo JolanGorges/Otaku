@@ -354,7 +354,7 @@ class Sources(DisplayWindow):
             if control.torbox_enabled() and control.getSetting('tb.cloudInspection') == 'true':
                 debrid['torbox'] = True
 
-            self.usercloudSources = debrid_cloudfiles.sources().get_sources(debrid, query, episode)
+            self.usercloudSources = debrid_cloudfiles.sources().get_sources(debrid, query, episode, media_type)
             self.cloud_files += self.usercloudSources
 
         self.remainingProviders.remove('Cloud Inspection')
